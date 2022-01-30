@@ -194,9 +194,9 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
         } else if (mode === MODE_ENDLESS) {
             let cps = getCPS();
             let text = (cps === 0 ? '计算中' : cps.toFixed(2));
-            GameTimeLayer.innerHTML = `CPS:${text}`;
+            GameTimeLayer.innerHTML = `CPS: ${text}`;
         } else {
-            GameTimeLayer.innerHTML = `SCORE:${_gameScore}`;
+            GameTimeLayer.innerHTML = `${_gameScore} HITS`;
         }
     }
     //使重试按钮获得焦点
@@ -216,48 +216,8 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
         }, 1500);
     }
 
-
-    function encrypt(text) {
-        let encrypt = new JSEncrypt();
-        encrypt.setPublicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTzGwX6FVKc7rDiyF3H+jKpBlRCV4jOiJ4JR33qZPVXx8ahW6brdBF9H1vdHBAyO6AeYBumKIyunXP9xzvs1qJdRNhNoVwHCwGDu7TA+U4M7G9FArDG0Y6k4LbS0Ks9zeRBMiWkW53yQlPshhtOxXCuZZOMLqk1vEvTCODYYqX5QIDAQAB");
-        return encrypt.encrypt(text);
-    }
-
-    function SubmitResults() {
-        let system = "其他操作系统";
-        let area = "异世界";
-        if ($("#username").val() && _gameSettingNum === 20) {
-            const systems = [
-                ['Win', 'Windows'],
-                ['like Mac', 'iOS'],
-                ['Mac', 'Macintosh'],
-                ['Android', 'Android'],
-                ['Linux', 'Linux'],
-            ];
-
-            for (let sys of systems) {
-                if (navigator.appVersion.indexOf(sys[0]) !== -1) {
-                    system = sys[1];
-                    break;
-                }
-            }
-
-            if (returnCitySN && returnCitySN['cname']) {
-                area = returnCitySN['cname']
-            }
-
-            let httpRequest = new XMLHttpRequest();
-            httpRequest.open('POST', './SubmitResults.php', true);
-            httpRequest.setRequestHeader("Content-type", "application/json");
-            let name = $("#username").val();
-            let message = $("#message").val();
-            let test = "|_|";
-            httpRequest.send(encrypt(_gameScore + test + name + test + tj + test + system + test + area + test + message));
-        }
-    }
-
     function createTimeText(n) {
-        return '&nbsp;TIME:' + Math.ceil(n);
+        return Math.ceil(n) + 's';
     }
 
     let _ttreg = / t{1,2}(\d+)/,
@@ -438,14 +398,13 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
             if (!legalDeviationTime()) {
                 return '倒计时多了' + ((deviationTime / 1000) - 20).toFixed(2) + "s";
             }
-            SubmitResults();
         }
 
-        if (cps <= 5) return '试着好好练一下？';
-        if (cps <= 8) return 'TCL';
-        if (cps <= 10)  return 'TQL';
-        if (cps <= 15) return '您';
-        return '人？';
+        if (cps <= 5) return '翀皇写死了你的waifu';
+        if (cps <= 8) return '又被背刺了';
+        if (cps <= 10)  return '格里芬匿名板';
+        if (cps <= 15) return '更新世界的锋芒';
+        return '帝国上单';
     }
 
     function toStr(obj) {
